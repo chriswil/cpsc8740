@@ -7,6 +7,12 @@ from tkinter import ttk, messagebox
 
 class TodoApp:
     def __init__(self, root):
+        """
+        Initialize the TodoApp by configuring the main window, preparing task storage, and building the UI.
+        
+        Parameters:
+            root (tk.Tk): The main Tkinter root window that will host the application.
+        """
         self.root = root
         self.root.title("To-Do List Application")
         self.root.geometry("500x400")
@@ -18,6 +24,11 @@ class TodoApp:
 
     def create_widgets(self):
         # Main frame
+        """
+        Builds and lays out the complete GUI for the to-do application.
+        
+        Constructs the main frame, title label, task entry row with Add button and Return key binding, a scrollable task list, control buttons (Mark Complete, Delete, Edit, Clear All), and a status bar. Also configures grid weights for responsive resizing and initializes the status display.
+        """
         main_frame = ttk.Frame(self.root, padding="10")
         main_frame.grid(row=0, column=0, sticky=(tk.W, tk.E, tk.N, tk.S))
 
@@ -86,6 +97,11 @@ class TodoApp:
         self.update_status()
 
     def add_task(self):
+        """
+        Add the text from the task entry as a new task to the internal list and update the UI.
+        
+        If the entry contains non-whitespace text, appends a task dictionary with keys "text" and "completed" (initialized to False) to self.tasks, refreshes the task list display, clears the entry widget, and updates the status bar. If the entry is empty after trimming, shows a warning dialog prompting the user to enter a task.
+        """
         task_text = self.task_entry.get().strip()
         if task_text:
             task = {"text": task_text, "completed": False}
@@ -97,6 +113,11 @@ class TodoApp:
             messagebox.showwarning("Warning", "Please enter a task!")
 
     def mark_complete(self):
+        """
+        Toggle the selected task's completed state and update the UI.
+        
+        If a task is selected, flip its "completed" flag, refresh the task list display, and update the status bar; if no task is selected, show an informational dialog prompting the user to select a task.
+        """
         selection = self.task_listbox.curselection()
         if selection:
             index = selection[0]
@@ -108,6 +129,11 @@ class TodoApp:
             messagebox.showinfo("Info", "Please select a task to mark complete!")
 
     def delete_task(self):
+        """
+        Delete the currently selected task after user confirmation.
+        
+        If a task is selected in the listbox and its index is valid, prompts the user with a confirmation dialog showing the task text; on confirmation, removes the task, refreshes the displayed list, and updates the status bar. If no task is selected, shows an informational dialog instructing the user to select a task.
+        """
         selection = self.task_listbox.curselection()
         if selection:
             index = selection[0]
@@ -123,6 +149,11 @@ class TodoApp:
             messagebox.showinfo("Info", "Please select a task to delete!")
 
     def edit_task(self):
+        """
+        Open a modal dialog to edit the currently selected task's text.
+        
+        If a task is selected, displays an "Edit Task" dialog pre-filled with the task text. Saving (via the Save button or Enter) replaces the task text when the input is non-empty, refreshes the task list, and closes the dialog. If the input is empty, a warning is shown and the dialog stays open. If no task is selected, an informational dialog prompts the user to select a task.
+        """
         selection = self.task_listbox.curselection()
         if selection:
             index = selection[0]
@@ -144,6 +175,11 @@ class TodoApp:
                 edit_entry.focus()
 
                 def save_edit():
+                    """
+                    Save the edited task text, update the task list display, and close the edit dialog.
+                    
+                    If the entry is empty after trimming, shows a warning and leaves the edit dialog open.
+                    """
                     new_text = edit_entry.get().strip()
                     if new_text:
                         self.tasks[index]["text"] = new_text
@@ -172,6 +208,11 @@ class TodoApp:
             self.update_status()
 
     def refresh_task_list(self):
+        """
+        Rebuilds the task Listbox to reflect the current in-memory task list.
+        
+        Clears the Listbox, inserts one line per task prefixed with a status indicator ("✓" for completed, "○" for pending), and applies a gray foreground to completed tasks so they appear visually distinct.
+        """
         self.task_listbox.delete(0, tk.END)
         for i, task in enumerate(self.tasks):
             status = "✓" if task["completed"] else "○"
@@ -183,6 +224,12 @@ class TodoApp:
                 self.task_listbox.itemconfig(i, {"fg": "gray"})
 
     def update_status(self):
+        """
+        Update the status bar to show total, completed, and pending task counts.
+        
+        Calculates the number of tasks, how many are marked completed, and how many are pending,
+        then sets the status_label text to "Total: X | Completed: Y | Pending: Z".
+        """
         total_tasks = len(self.tasks)
         completed_tasks = sum(1 for task in self.tasks if task["completed"])
         pending_tasks = total_tasks - completed_tasks

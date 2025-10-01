@@ -7,6 +7,17 @@ from tkinter import ttk, messagebox
 
 class TicTacToe:
     def __init__(self, root):
+        """
+        Initialize the TicTacToe application state and construct the user interface.
+        
+        Parameters:
+            root: The Tkinter root window that will host the application.
+        
+        Description:
+            Sets window title and size, initializes the game state (3x3 board, current player,
+            game_over flag, and scores for X, O, and ties), and creates all UI widgets by
+            calling create_widgets.
+        """
         self.root = root
         self.root.title("Tic-Tac-Toe Game")
         self.root.geometry("400x500")
@@ -21,6 +32,11 @@ class TicTacToe:
 
     def create_widgets(self):
         # Main frame
+        """
+        Constructs and lays out the Tic-Tac-Toe user interface inside the root window.
+        
+        Creates the main frame, title and status labels, a 3x3 grid of game buttons wired to make_move, control buttons for starting a new game and resetting scores, and a score display. Also configures grid weights for responsive resizing and initializes the score text.
+        """
         main_frame = ttk.Frame(self.root, padding="10")
         main_frame.grid(row=0, column=0, sticky=(tk.W, tk.E, tk.N, tk.S))
 
@@ -95,6 +111,15 @@ class TicTacToe:
         self.update_score_display()
 
     def make_move(self, row, col):
+        """
+        Handle a player's move at the given board position.
+        
+        Updates the game state and UI when the current player places a mark at (row, col). If the move produces a win or a tie, sets the game as over, updates the status label and scores, disables the board, refreshes the score display, and shows a game-over message box. If the game continues, switches the active player and updates the current player label.
+        
+        Parameters:
+            row (int): Zero-based row index on the 3x3 board (0–2).
+            col (int): Zero-based column index on the 3x3 board (0–2).
+        """
         if not self.game_over and self.board[row][col] == "":
             # Make the move
             self.board[row][col] = self.current_player
@@ -153,6 +178,14 @@ class TicTacToe:
 
     def new_game(self):
         # Reset board
+        """
+        Start a new game by resetting the game state and user interface.
+        
+        Resets the internal 3x3 board to empty strings, sets the current player to "X",
+        and marks the game as not over. Clears and re-enables all board buttons (sets
+        their text to empty and background to light blue) and updates the player and
+        status labels to indicate a new game in progress.
+        """
         self.board = [["" for _ in range(3)] for _ in range(3)]
         self.current_player = "X"
         self.game_over = False
@@ -167,6 +200,11 @@ class TicTacToe:
         self.status_label.config(text="Game in progress...")
 
     def reset_scores(self):
+        """
+        Prompt the user to confirm and, if confirmed, reset the recorded scores for X, O, and ties and update the displayed score.
+        
+        If the user confirms, sets self.scores to {"X": 0, "O": 0, "Tie": 0} and calls update_score_display to refresh the UI.
+        """
         if messagebox.askyesno(
             "Reset Scores", "Are you sure you want to reset all scores?"
         ):
@@ -174,6 +212,12 @@ class TicTacToe:
             self.update_score_display()
 
     def update_score_display(self):
+        """
+        Update the on-screen score label to reflect the current counts for X, O, and ties.
+        
+        Builds a single-line score summary in the form "Player X: <x>  |  Player O: <o>  |  Ties: <t>"
+        and sets that text on the instance's score_label widget.
+        """
         score_text = f"Player X: {self.scores['X']}  |  Player O: {self.scores['O']}  |  Ties: {self.scores['Tie']}"
         self.score_label.config(text=score_text)
 
