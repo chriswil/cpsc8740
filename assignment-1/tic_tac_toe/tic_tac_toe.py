@@ -4,6 +4,7 @@
 import tkinter as tk
 from tkinter import ttk, messagebox
 
+
 class TicTacToe:
     def __init__(self, root):
         self.root = root
@@ -24,12 +25,17 @@ class TicTacToe:
         main_frame.grid(row=0, column=0, sticky=(tk.W, tk.E, tk.N, tk.S))
 
         # Title
-        title_label = ttk.Label(main_frame, text="Tic-Tac-Toe", font=("Arial", 20, "bold"))
+        title_label = ttk.Label(
+            main_frame, text="Tic-Tac-Toe", font=("Arial", 20, "bold")
+        )
         title_label.grid(row=0, column=0, columnspan=3, pady=(0, 10))
 
         # Current player display
-        self.player_label = ttk.Label(main_frame, text=f"Current Player: {self.current_player}",
-                                     font=("Arial", 14))
+        self.player_label = ttk.Label(
+            main_frame,
+            text=f"Current Player: {self.current_player}",
+            font=("Arial", 14),
+        )
         self.player_label.grid(row=1, column=0, columnspan=3, pady=5)
 
         # Game board frame
@@ -41,24 +47,35 @@ class TicTacToe:
         for i in range(3):
             button_row = []
             for j in range(3):
-                btn = tk.Button(board_frame, text="", font=("Arial", 24, "bold"),
-                               width=4, height=2, bg="lightblue",
-                               command=lambda r=i, c=j: self.make_move(r, c))
+                btn = tk.Button(
+                    board_frame,
+                    text="",
+                    font=("Arial", 24, "bold"),
+                    width=4,
+                    height=2,
+                    bg="lightblue",
+                    command=lambda r=i, c=j: self.make_move(r, c),
+                )
                 btn.grid(row=i, column=j, padx=2, pady=2)
                 button_row.append(btn)
             self.buttons.append(button_row)
 
         # Game status
-        self.status_label = ttk.Label(main_frame, text="Game in progress...",
-                                     font=("Arial", 12))
+        self.status_label = ttk.Label(
+            main_frame, text="Game in progress...", font=("Arial", 12)
+        )
         self.status_label.grid(row=3, column=0, columnspan=3, pady=10)
 
         # Control buttons
         control_frame = ttk.Frame(main_frame)
         control_frame.grid(row=4, column=0, columnspan=3, pady=10)
 
-        ttk.Button(control_frame, text="New Game", command=self.new_game).grid(row=0, column=0, padx=5)
-        ttk.Button(control_frame, text="Reset Scores", command=self.reset_scores).grid(row=0, column=1, padx=5)
+        ttk.Button(control_frame, text="New Game", command=self.new_game).grid(
+            row=0, column=0, padx=5
+        )
+        ttk.Button(control_frame, text="Reset Scores", command=self.reset_scores).grid(
+            row=0, column=1, padx=5
+        )
 
         # Score display
         score_frame = ttk.LabelFrame(main_frame, text="Scores", padding="10")
@@ -81,9 +98,11 @@ class TicTacToe:
         if not self.game_over and self.board[row][col] == "":
             # Make the move
             self.board[row][col] = self.current_player
-            self.buttons[row][col].config(text=self.current_player,
-                                         fg="red" if self.current_player == "X" else "blue",
-                                         state="disabled")
+            self.buttons[row][col].config(
+                text=self.current_player,
+                fg="red" if self.current_player == "X" else "blue",
+                state="disabled",
+            )
 
             # Check for win or tie
             winner = self.check_winner()
@@ -148,13 +167,16 @@ class TicTacToe:
         self.status_label.config(text="Game in progress...")
 
     def reset_scores(self):
-        if messagebox.askyesno("Reset Scores", "Are you sure you want to reset all scores?"):
+        if messagebox.askyesno(
+            "Reset Scores", "Are you sure you want to reset all scores?"
+        ):
             self.scores = {"X": 0, "O": 0, "Tie": 0}
             self.update_score_display()
 
     def update_score_display(self):
         score_text = f"Player X: {self.scores['X']}  |  Player O: {self.scores['O']}  |  Ties: {self.scores['Tie']}"
         self.score_label.config(text=score_text)
+
 
 if __name__ == "__main__":
     root = tk.Tk()

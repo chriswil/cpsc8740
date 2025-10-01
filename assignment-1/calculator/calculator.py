@@ -2,7 +2,7 @@
 # CPSC 8740 - Assignment 1
 
 import tkinter as tk
-from tkinter import ttk
+
 
 class Calculator:
     def __init__(self, root):
@@ -20,26 +20,50 @@ class Calculator:
 
     def create_widgets(self):
         # Display
-        self.display = tk.Entry(self.root, font=("Arial", 16), justify="right", state="readonly")
+        self.display = tk.Entry(
+            self.root, font=("Arial", 16), justify="right", state="readonly"
+        )
         self.display.grid(row=0, column=0, columnspan=4, padx=5, pady=5, sticky="ew")
 
         # Button layout
         buttons = [
-            ('C', 1, 0), ('±', 1, 1), ('%', 1, 2), ('÷', 1, 3),
-            ('7', 2, 0), ('8', 2, 1), ('9', 2, 2), ('×', 2, 3),
-            ('4', 3, 0), ('5', 3, 1), ('6', 3, 2), ('-', 3, 3),
-            ('1', 4, 0), ('2', 4, 1), ('3', 4, 2), ('+', 4, 3),
-            ('0', 5, 0), ('.', 5, 2), ('=', 5, 3)
+            ("C", 1, 0),
+            ("±", 1, 1),
+            ("%", 1, 2),
+            ("÷", 1, 3),
+            ("7", 2, 0),
+            ("8", 2, 1),
+            ("9", 2, 2),
+            ("×", 2, 3),
+            ("4", 3, 0),
+            ("5", 3, 1),
+            ("6", 3, 2),
+            ("-", 3, 3),
+            ("1", 4, 0),
+            ("2", 4, 1),
+            ("3", 4, 2),
+            ("+", 4, 3),
+            ("0", 5, 0),
+            (".", 5, 2),
+            ("=", 5, 3),
         ]
 
-        for (text, row, col) in buttons:
-            if text == '0':
-                btn = tk.Button(self.root, text=text, font=("Arial", 14),
-                               command=lambda t=text: self.button_click(t))
+        for text, row, col in buttons:
+            if text == "0":
+                btn = tk.Button(
+                    self.root,
+                    text=text,
+                    font=("Arial", 14),
+                    command=lambda t=text: self.button_click(t),
+                )
                 btn.grid(row=row, column=col, columnspan=2, padx=2, pady=2, sticky="ew")
             else:
-                btn = tk.Button(self.root, text=text, font=("Arial", 14),
-                               command=lambda t=text: self.button_click(t))
+                btn = tk.Button(
+                    self.root,
+                    text=text,
+                    font=("Arial", 14),
+                    command=lambda t=text: self.button_click(t),
+                )
                 btn.grid(row=row, column=col, padx=2, pady=2, sticky="ew")
 
         # Configure grid weights
@@ -53,17 +77,17 @@ class Calculator:
     def button_click(self, char):
         if char.isdigit():
             self.number_click(char)
-        elif char == '.':
+        elif char == ".":
             self.decimal_click()
-        elif char in '+-×÷':
+        elif char in "+-×÷":
             self.operation_click(char)
-        elif char == '=':
+        elif char == "=":
             self.equals_click()
-        elif char == 'C':
+        elif char == "C":
             self.clear_click()
-        elif char == '±':
+        elif char == "±":
             self.sign_click()
-        elif char == '%':
+        elif char == "%":
             self.percent_click()
 
     def number_click(self, number):
@@ -81,8 +105,8 @@ class Calculator:
         if self.new_number:
             self.current = "0."
             self.new_number = False
-        elif '.' not in self.current:
-            self.current += '.'
+        elif "." not in self.current:
+            self.current += "."
         self.update_display()
 
     def operation_click(self, op):
@@ -97,13 +121,13 @@ class Calculator:
         if self.operation and not self.new_number:
             current_num = float(self.current)
 
-            if self.operation == '+':
+            if self.operation == "+":
                 self.total += current_num
-            elif self.operation == '-':
+            elif self.operation == "-":
                 self.total -= current_num
-            elif self.operation == '×':
+            elif self.operation == "×":
                 self.total *= current_num
-            elif self.operation == '÷':
+            elif self.operation == "÷":
                 if current_num != 0:
                     self.total /= current_num
                 else:
@@ -126,10 +150,10 @@ class Calculator:
 
     def sign_click(self):
         if self.current != "0":
-            if self.current.startswith('-'):
+            if self.current.startswith("-"):
                 self.current = self.current[1:]
             else:
-                self.current = '-' + self.current
+                self.current = "-" + self.current
         self.update_display()
 
     def percent_click(self):
@@ -141,6 +165,7 @@ class Calculator:
         self.display.delete(0, tk.END)
         self.display.insert(0, self.current)
         self.display.config(state="readonly")
+
 
 if __name__ == "__main__":
     root = tk.Tk()
