@@ -4,6 +4,7 @@
 import tkinter as tk
 from tkinter import ttk, messagebox
 
+
 class TodoApp:
     def __init__(self, root):
         self.root = root
@@ -21,25 +22,33 @@ class TodoApp:
         main_frame.grid(row=0, column=0, sticky=(tk.W, tk.E, tk.N, tk.S))
 
         # Title
-        title_label = ttk.Label(main_frame, text="To-Do List", font=("Arial", 16, "bold"))
+        title_label = ttk.Label(
+            main_frame, text="To-Do List", font=("Arial", 16, "bold")
+        )
         title_label.grid(row=0, column=0, columnspan=3, pady=(0, 10))
 
         # Task entry
-        ttk.Label(main_frame, text="New Task:").grid(row=1, column=0, sticky=tk.W, pady=5)
+        ttk.Label(main_frame, text="New Task:").grid(
+            row=1, column=0, sticky=tk.W, pady=5
+        )
         self.task_entry = ttk.Entry(main_frame, width=40)
         self.task_entry.grid(row=1, column=1, padx=5, pady=5, sticky=(tk.W, tk.E))
-        self.task_entry.bind('<Return>', lambda e: self.add_task())
+        self.task_entry.bind("<Return>", lambda e: self.add_task())
 
         add_button = ttk.Button(main_frame, text="Add Task", command=self.add_task)
         add_button.grid(row=1, column=2, padx=5, pady=5)
 
         # Task list frame
         list_frame = ttk.Frame(main_frame)
-        list_frame.grid(row=2, column=0, columnspan=3, sticky=(tk.W, tk.E, tk.N, tk.S), pady=10)
+        list_frame.grid(
+            row=2, column=0, columnspan=3, sticky=(tk.W, tk.E, tk.N, tk.S), pady=10
+        )
 
         # Scrollable task list
         self.task_listbox = tk.Listbox(list_frame, height=15, selectmode=tk.SINGLE)
-        scrollbar = ttk.Scrollbar(list_frame, orient=tk.VERTICAL, command=self.task_listbox.yview)
+        scrollbar = ttk.Scrollbar(
+            list_frame, orient=tk.VERTICAL, command=self.task_listbox.yview
+        )
         self.task_listbox.configure(yscrollcommand=scrollbar.set)
 
         self.task_listbox.grid(row=0, column=0, sticky=(tk.W, tk.E, tk.N, tk.S))
@@ -49,10 +58,18 @@ class TodoApp:
         button_frame = ttk.Frame(main_frame)
         button_frame.grid(row=3, column=0, columnspan=3, pady=10)
 
-        ttk.Button(button_frame, text="Mark Complete", command=self.mark_complete).grid(row=0, column=0, padx=5)
-        ttk.Button(button_frame, text="Delete Task", command=self.delete_task).grid(row=0, column=1, padx=5)
-        ttk.Button(button_frame, text="Edit Task", command=self.edit_task).grid(row=0, column=2, padx=5)
-        ttk.Button(button_frame, text="Clear All", command=self.clear_all).grid(row=0, column=3, padx=5)
+        ttk.Button(button_frame, text="Mark Complete", command=self.mark_complete).grid(
+            row=0, column=0, padx=5
+        )
+        ttk.Button(button_frame, text="Delete Task", command=self.delete_task).grid(
+            row=0, column=1, padx=5
+        )
+        ttk.Button(button_frame, text="Edit Task", command=self.edit_task).grid(
+            row=0, column=2, padx=5
+        )
+        ttk.Button(button_frame, text="Clear All", command=self.clear_all).grid(
+            row=0, column=3, padx=5
+        )
 
         # Status bar
         self.status_label = ttk.Label(main_frame, text="Ready")
@@ -71,7 +88,7 @@ class TodoApp:
     def add_task(self):
         task_text = self.task_entry.get().strip()
         if task_text:
-            task = {'text': task_text, 'completed': False}
+            task = {"text": task_text, "completed": False}
             self.tasks.append(task)
             self.refresh_task_list()
             self.task_entry.delete(0, tk.END)
@@ -84,7 +101,7 @@ class TodoApp:
         if selection:
             index = selection[0]
             if index < len(self.tasks):
-                self.tasks[index]['completed'] = not self.tasks[index]['completed']
+                self.tasks[index]["completed"] = not self.tasks[index]["completed"]
                 self.refresh_task_list()
                 self.update_status()
         else:
@@ -95,8 +112,10 @@ class TodoApp:
         if selection:
             index = selection[0]
             if index < len(self.tasks):
-                task_text = self.tasks[index]['text']
-                if messagebox.askyesno("Confirm Delete", f"Delete task: '{task_text}'?"):
+                task_text = self.tasks[index]["text"]
+                if messagebox.askyesno(
+                    "Confirm Delete", f"Delete task: '{task_text}'?"
+                ):
                     del self.tasks[index]
                     self.refresh_task_list()
                     self.update_status()
@@ -108,7 +127,7 @@ class TodoApp:
         if selection:
             index = selection[0]
             if index < len(self.tasks):
-                current_text = self.tasks[index]['text']
+                current_text = self.tasks[index]["text"]
 
                 # Create edit dialog
                 edit_window = tk.Toplevel(self.root)
@@ -127,7 +146,7 @@ class TodoApp:
                 def save_edit():
                     new_text = edit_entry.get().strip()
                     if new_text:
-                        self.tasks[index]['text'] = new_text
+                        self.tasks[index]["text"] = new_text
                         self.refresh_task_list()
                         edit_window.destroy()
                     else:
@@ -135,10 +154,14 @@ class TodoApp:
 
                 button_frame = ttk.Frame(edit_window)
                 button_frame.pack(pady=10)
-                ttk.Button(button_frame, text="Save", command=save_edit).pack(side=tk.LEFT, padx=5)
-                ttk.Button(button_frame, text="Cancel", command=edit_window.destroy).pack(side=tk.LEFT, padx=5)
+                ttk.Button(button_frame, text="Save", command=save_edit).pack(
+                    side=tk.LEFT, padx=5
+                )
+                ttk.Button(
+                    button_frame, text="Cancel", command=edit_window.destroy
+                ).pack(side=tk.LEFT, padx=5)
 
-                edit_entry.bind('<Return>', lambda e: save_edit())
+                edit_entry.bind("<Return>", lambda e: save_edit())
         else:
             messagebox.showinfo("Info", "Please select a task to edit!")
 
@@ -151,20 +174,23 @@ class TodoApp:
     def refresh_task_list(self):
         self.task_listbox.delete(0, tk.END)
         for i, task in enumerate(self.tasks):
-            status = "✓" if task['completed'] else "○"
+            status = "✓" if task["completed"] else "○"
             text = f"{status} {task['text']}"
             self.task_listbox.insert(tk.END, text)
 
             # Change color for completed tasks
-            if task['completed']:
-                self.task_listbox.itemconfig(i, {'fg': 'gray'})
+            if task["completed"]:
+                self.task_listbox.itemconfig(i, {"fg": "gray"})
 
     def update_status(self):
         total_tasks = len(self.tasks)
-        completed_tasks = sum(1 for task in self.tasks if task['completed'])
+        completed_tasks = sum(1 for task in self.tasks if task["completed"])
         pending_tasks = total_tasks - completed_tasks
 
-        self.status_label.config(text=f"Total: {total_tasks} | Completed: {completed_tasks} | Pending: {pending_tasks}")
+        self.status_label.config(
+            text=f"Total: {total_tasks} | Completed: {completed_tasks} | Pending: {pending_tasks}"
+        )
+
 
 if __name__ == "__main__":
     root = tk.Tk()
